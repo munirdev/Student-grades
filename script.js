@@ -77,9 +77,18 @@ if (total >= passMark) {
 }
 
 function calculateEnglish() {
-const assignmentMark = parseFloat(document.getElementById('englishAssignment').value) || 0;
-const examMark = parseFloat(document.getElementById('englishExam').value) || 0;
-calculateResult(assignmentMark, examMark, [0.20, 0.80], 49.20, 'englishResult', ['47.20']);
+    const assignmentMark = parseFloat(document.getElementById('englishAssignment').value) || 0;
+    const examMark = parseFloat(document.getElementById('englishExam').value) || 0;
+
+    // تحقق إذا كانت علامة الامتحان أقل من 40
+    if (examMark < 40) {
+        const resultElement = document.getElementById('englishResult');
+        resultElement.className = 'result failure';
+        resultElement.textContent = 'للأسف، علامة الامتحان أقل من 40. لقد رسبت.';
+        return;
+    }
+
+    calculateResult(assignmentMark, examMark, [0.20, 0.80], 49.20, 'englishResult', ['47.20']);
 }
 
 function calculateBACT() {
