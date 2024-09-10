@@ -38,9 +38,18 @@ function calculateResult(assignmentMark, examMark, weights, passMark, resultElem
         document.getElementById(resultElementId).textContent = 'الرجاء إدخال علامات صحيحة.';
         return;
     }
-    if (assignmentMark <= 39) {
+
+    // التحقق من علامة الوظيفة
+    if (assignmentMark < 40) {
         document.getElementById(resultElementId).className = 'result failure';
-        document.getElementById(resultElementId).textContent = 'للأسف، لا يمكنك تقديم الامتحان لأن علامة الوظيفة اقل من الحد الادنى.';
+        document.getElementById(resultElementId).textContent = 'للأسف، لا يمكنك تقديم الامتحان لأن علامة الوظيفة أقل من الحد الأدنى.';
+        return;
+    }
+
+    // التحقق من علامة الامتحان
+    if (examMark < 40) {
+        document.getElementById(resultElementId).className = 'result failure';
+        document.getElementById(resultElementId).textContent = 'للأسف، لا يمكنك النجاح لأن علامة الامتحان أقل من الحد الأدنى.';
         return;
     }
 
@@ -48,7 +57,7 @@ function calculateResult(assignmentMark, examMark, weights, passMark, resultElem
     const total = (assignmentMark * assignmentWeight) + (examMark * examWeight);
     const resultElement = document.getElementById(resultElementId);
 
-    if (total > 100) {
+    if (total.toFixed(2) > 100) {
         resultElement.className = 'result failure';
         resultElement.textContent = 'خطأ: العلامة المدخلة لا يجب أن تتجاوز 100 درجة.';
         return;
@@ -63,10 +72,12 @@ function calculateResult(assignmentMark, examMark, weights, passMark, resultElem
 
     if (total >= passMark) {
         resultElement.className = total >= (passMark + 1) ? 'result success' : 'result success';
-        resultElement.textContent = total >= (passMark + 1) ? 'مبروك، لقد نجحت! مجموعك: ' + total.toFixed(2) : 'مبروك: لقد نجحت تجبر العلامة الى علامة النجاح: ' + total.toFixed(2) ;
+        resultElement.textContent = total >= (passMark + 1) 
+            ? 'مبروك، لقد نجحت! مجموعك: ' + total.toFixed(2) 
+            : 'مبروك: تم تقريب العلامة إلى علامة النجاح. مجموعك: ' + total.toFixed(2);
     } else if (total >= (passMark - 2) && total < passMark) {
         resultElement.className = 'result warning';
-        resultElement.textContent = 'تنبيه: تحتاج إلى علامة اوعلامتين  للنجاح. مجموعك: ' + total.toFixed(2);
+        resultElement.textContent = 'تنبيه: تحتاج إلى علامة أو علامتين للنجاح. مجموعك: ' + total.toFixed(2);
     } else {
         resultElement.className = 'result failure';
         resultElement.textContent = 'للأسف، لم تنجح. مجموعك: ' + total.toFixed(2);
@@ -76,12 +87,6 @@ function calculateResult(assignmentMark, examMark, weights, passMark, resultElem
 function calculateEnglish() {
     const assignmentMark = parseFloat(document.getElementById('englishAssignment').value) || 0;
     const examMark = parseFloat(document.getElementById('englishExam').value) || 0;
-    // تحقق من علامة الامتحان قبل حساب النتيجة
-    if (examMark < 40) {
-        document.getElementById('englishResult').className = 'result failure';
-        document.getElementById('englishResult').textContent = 'للأسف، رسبت في امتحان اللغة الإنجليزية. علامة الامتحان أقل من 40.';
-        return;
-    }
     calculateResult(assignmentMark, examMark, [0.20, 0.80], 49.20, 'englishResult', ['47.20']);
 }
 
